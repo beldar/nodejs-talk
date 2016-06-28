@@ -25,9 +25,93 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					
+					<h1>Portada</h1>
 				</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>About me</h1>
+					<aside class="notes">
+					  I am a FE dev, but I'm not here to talk about FE, but mainly
+						about BE.
+						I used to be a full stack dev, mainly working with PHP for many years,
+						CodeIgniter, Zend, Larabel a bit of Symphony, you name it.
+						Since then I wanted to specialize on the FE since lately the paradigm
+						has shifted heavely on do more things on the FE. But I found very difficult
+						to get things done without a foot on the BE, NodeJS was the answer, it allowed
+						me to prototype very quickly
+					</aside>
+				</section>
+				<section>
+					<h2>This talk</h2>
+
+					<aside class="notes">
+					  This talk will have two parts, almost with separate subjects,
+						the first part will be about Nodejs, its strengths and clear some
+						misconceptions around it.
+
+						The second part will be around a couple programming techniques I've adopted
+						which I find has helped me keep a more readable and clean code and avoid
+						bugs from the start.
+					</aside>
+				</section>
+
+				<section>
+					<h1>Part 1: NodeJS</h1>
+
+					<p>
+						Brief introduction to NodeJS
+					</p>
+
+				</section>
+
+				<section>
+					<h2>What is Node.js?</h2>
+					<p>
+						<blockquote cite="https://nodejs.org/en/">
+							Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
+						</blockquote>
+						<small>Note: V8 compiles Javascript into machine code on the fly</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>What is Node.js?</h2>
+					<h3>Asynchronous and Event Driven</h3>
+					<p>
+						All APIs of Node.js library are asynchronous that is, non-blocking. <strong>There is no sleep on Node</strong>.<br />
+						<img width="50%" src="img/event-loop.png" title="Node processing model" />
+					</p>
+				</section>
+
+				<section>
+					<h2>What is Node.js?</h2>
+					<h3>Very Fast</h3>
+					<p>
+						Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.<br />
+						<img src="img/nodejs-vs-php-perf.png" alt="Node vs PHP" />
+					</p>
+				</section>
+				<section>
+					<h2>What is Node.js?</h2>
+					<h3>Single Threaded but Highly Scalable</h3>
+					<p>
+						Node.js uses a single threaded model with event looping.<br/>
+						<img src="img/single-thread.png" title="Single thread example" />
+					</p>
+				</section>
+
+				<aside class="notes">
+					A paradigm that is getting a lot of traction here and everywhere are microservices.
+					Joint together with the compartimentalisation of Docker and similar allows us to
+					chop our services into a more stand alone units which also helps us to scale.
+
+					We're breaking from the monolithic infrastructure. Another great strength of microservices
+					is that are language agnostic, we can write them in any language we want, and we've been doing that.
+
+					But when we choose a language we need to weight the main features or advantages of each of them.
+
+					At Sainsburys we use a wide range of languages, I want to quickly go through what I think are some of the
+					strengths and weaknesses of the languages are, and please forgive me for the the oversimplification exercice.
+				</aside>
 			</div>
 		</div>
 

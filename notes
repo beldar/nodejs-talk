@@ -1,6 +1,7 @@
 NodeJS Talk
 
-NodeJS: Debunking myths and misconceptions, best practices and why we should be using it more at Sainsburys
+Part1: A case for Nodejs and why we should use it more
+Part2: Programming techniques to improve your code
 
 My background:
 
@@ -26,7 +27,7 @@ We use a lot of different range of languages here at Sainsburys
         - good practices not well defined yet
     - PHP
         - Easy to learn
-    - Nodes
+    - Node
         - Build for the web
         - Async
         - Non-blocking
