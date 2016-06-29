@@ -70,7 +70,29 @@
 							Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 						</blockquote>
 						<small>Note: V8 compiles Javascript into machine code on the fly</small>
+
+						<aside class="notes">
+						  I think very few people who criticise or don't like Node don't actually
+							know how it works internally .
+
+							I want to give you a quick peek to the guts of the language, so you can see
+							where it all comes from.
+						</aside>
 					</p>
+				</section>
+
+				<section>
+					<h2>Node is FAST</h2>
+					<p>
+						Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.<br />
+						<img src="img/n_queens_graph.jpg" alt="Node vs Python" />
+						<img src="img/nodejs-vs-php-perf.png" alt="Node vs PHP" />
+					</p>
+					<aside class="notes">
+					  I'm not usually a fan of benchmarks or comparisons, but when you're talking
+						about speed you need to do it in context of others. These charts have different
+						metrics by the way.
+					</aside>
 				</section>
 
 				<section>
@@ -80,22 +102,206 @@
 						All APIs of Node.js library are asynchronous that is, non-blocking. <strong>There is no sleep on Node</strong>.<br />
 						<img width="50%" src="img/event-loop.png" title="Node processing model" />
 					</p>
+					<aside class="notes">
+					  To understand why Node is so fast and can take so many request with a single thread,
+						to understand this event loop model a bit more in depth we need to look at the internals.
+					</aside>
 				</section>
 
 				<section>
-					<h2>What is Node.js?</h2>
-					<h3>Very Fast</h3>
+					<h2>The internals</h2>
 					<p>
-						Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.<br />
-						<img src="img/nodejs-vs-php-perf.png" alt="Node vs PHP" />
+						The trick? The most important and critical parts are written in C++
+						<img src="img/node-parts.png" />
 					</p>
+					<aside class="notes">
+					  All of us now, you can't get any faster than C/C++, V8 is written in C++,
+						libuv it's a C library that provides all the async features, maintains the
+						event loops, a thread pool, file system, I/O, network, and other critical applications.
+
+						The Bindings are the glue that binds Javascript and the C modules.
+
+						Third party libraries can have C bindings too, which are compiled for your
+						machine when you install them, i.e. node-sass
+					</aside>
 				</section>
+
 				<section>
-					<h2>What is Node.js?</h2>
-					<h3>Single Threaded but Highly Scalable</h3>
+					<h2>Single Threaded but Highly Scalable</h2>
 					<p>
 						Node.js uses a single threaded model with event looping.<br/>
 						<img src="img/single-thread.png" title="Single thread example" />
+					</p>
+					<aside class="notes">
+					  Normally, when a request comes in, the application would handle the
+						request and halt all other operations until the request is processed.
+						This immediately presents a problem: when a large number of requests
+						come in at the same time, each request would have to wait until the
+						previous requests are processed. In other words, the previous
+						operation will block the ones following it. To make it worse,
+						if the previous requests have long response time,
+						all other requests would be halted/blocked for a long time.
+
+						To address this issue, one can resort to multiprocessing and/or multithreading
+						as solutions, each with its own pros and cons. Node.js handles things differently.
+						Instead of spawning a new thread for every new request, all the requests are handled
+						on one single main thread, and that’s pretty much all that it does: handle requests.
+
+						All (I/O) operations contained in the request,
+						such as file system access, database read/write,
+						are sent to the worker threads maintained by libuv (mentioned above)
+						in the background. In other words, I/O operations in the requests
+						are handled asynchronously, not on the main thread.
+					</aside>
+				</section>
+
+				<section>
+					<h2>How does all work then?</h2>
+					<p>
+						The restaurant analogy:<br />
+						<img width="50%" src="img/waiter-order.jpg" />
+					</p>
+
+					<aside class="notes">
+					  The waiter is our Main Thread, the Node process.
+						The waiter takes the order from a request, that order is an event
+					</aside>
+				</section>
+
+				<section>
+					<h2>How does all work then?</h2>
+					<p>
+						<img src="img/waiter-kitchen.jpg" alt="" />
+					</p>
+
+					<aside class="notes">
+						The waiter leaves the order with the cooks.
+						The cooks are the the libuv worker threads, they are really fast
+						and efficient, when they're finished they give the output (the dish)
+						back to the waiter who brings it back to the user.
+
+						That's it.
+					</aside>
+				</section>
+
+				<section>
+					<h3>Companies using Node.js in production</h3>
+					<ol>
+						<li><a target="_blank" href="https://www.youtube.com/watch?v=gtjzjiTI96c&list=PLfXiENmg6yyUpIVY9XVOkbdmBPx6PUm9_">Netflix</a></li>
+						<li><a target="_blank" href="https://source.opennews.org/en-US/articles/nyt-redesigns-mobile/">New York Times</a></li>
+						<li><a target="_blank" href="https://www.paypal-engineering.com/2013/11/22/node-js-at-paypal/">PayPal</a> </li>
+						<li><a target="_blank" href="http://highscalability.com/blog/2012/10/4/linkedin-moved-from-rails-to-node-27-servers-cut-and-up-to-2.html">LinkedIn</a></li>
+						<li><a target="_blank" href="https://medium.com/@nodejs/how-uber-uses-node-js-to-scale-their-business-cd4d8f8e4187#.rf4v5rw0w">Uber</a> </li>
+						<li><a target="_blank" href="http://venturebeat.com/2012/01/24/why-walmart-is-using-node-js/">Wallmart</a> </li>
+						<li><a target="_blank" href="http://blog.fogcreek.com/the-trello-tech-stack/">Trello</a></li>
+					</ol>
+
+					<aside class="notes">
+					  These companies receive an insane amount of requests,
+						the scale on which they work is gigantic, and they've chosen
+						node because of their scalability and easy of use.
+
+						In fact lets read it from the guys themselves.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Paypal</h2>
+					<p>
+						<img width="90%" src="img/paypal.png"  />
+					</p>
+				</section>
+
+				<section>
+					<h2>LinkedIn</h2>
+					<p>
+						<img width="90%" src="img/linked-in.png" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Uber</h2>
+					<p>
+						<img width="90%" src="img/uber.png" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Scale</h2>
+					<p>
+						Is it all the DevOps' (InfraDevs) job?
+					</p>
+
+					<aside class="notes">
+					  I think we sould all realise that scale is a systemic issue,
+						you don't solve it in just one end of the chain, it needs to
+						be build inside the project.
+
+						Build to scale from the start and you'll never have to worry about load.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Scale</h2>
+					<p>
+						In two commands you can have a cluster, one instance per CPU
+<pre><code class="hljs sh" data-trim contenteditable>
+$ npm install pm2 --global
+$ pm2 start app.js -i 0
+</code></pre>
+						<img src="img/pm2.png" />
+					</p>
+
+					<aside class="notes">
+					  PM2 is a wonderful tool, it's the best process manager for node out there,
+						Makes sure your application is always running, even after a crash,
+						allows you to demonize your app,
+						gathers logs for you,
+						and lets you run in cluster mode.
+
+						By running this command I now have quadrupled the amount of requests
+						my application can handle, and that's only on my laptop, can you imagine
+						what you can do on a 32 CPU AWS machine? Maybe you don't need that many servers
+						after all.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Abundance</h2>
+					<p>
+						Javascript was the most popular language in 2015 by third year in a row.<br />
+						<img src="img/overflow.png" /><br />
+						<small>StackOverflow</small>
+					</p>
+
+					<aside class="notes">
+					  I'm not saying it's not difficult to find a good Node developer,
+						but the pool of possible applicants is way way bigger than say Go developers
+					</aside>
+				</section>
+
+				<section>
+					<h2>Versatility</h2>
+					<p>
+						What would you say if you could have an engineer that could do all these things:
+						<ul>
+							<li><a target="_blank" href="http://www.nodecopter.com/">Drones</a></li>
+							<li><a target="_blank" href="http://node-ardx.org/">Arduino</a></li>
+							<li><a target="_blank" href="http://electron.atom.io/">Cross-platform Desktop apps</a></li>
+							<li><a target="_blank" href="https://facebook.github.io/react-native/">Native mobile apps</a></li>
+							<li><a target="_blank" href="https://developer.atlassian.com/blog/2015/11/scripting-with-node/">Command line tools</a></li>
+						</ul>
+					</p>
+
+					<aside class="notes">
+					  What would you think if I tell you, you can have an engineer that can code:...
+					</aside>
+				</section>
+
+				<section>
+					<h2>Versatility</h2>
+					<p>
+						Oh.. and you know, universal (isomorphic) web applications.
 					</p>
 				</section>
 
@@ -108,9 +314,6 @@
 					is that are language agnostic, we can write them in any language we want, and we've been doing that.
 
 					But when we choose a language we need to weight the main features or advantages of each of them.
-
-					At Sainsburys we use a wide range of languages, I want to quickly go through what I think are some of the
-					strengths and weaknesses of the languages are, and please forgive me for the the oversimplification exercice.
 				</aside>
 			</div>
 		</div>
@@ -122,7 +325,7 @@
 			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
 				history: true,
-
+				showNotes: true,
 				// More info https://github.com/hakimel/reveal.js#dependencies
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
