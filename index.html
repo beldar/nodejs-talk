@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>NodeJS Talk</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -32,12 +32,12 @@
 					<aside class="notes">
 					  I am a FE dev, but I'm not here to talk about FE, but mainly
 						about BE.
-						I used to be a full stack dev, mainly working with PHP for many years,
+						I come from a full stack background, mainly working with PHP for many years,
 						CodeIgniter, Zend, Larabel a bit of Symphony, you name it.
 						Since then I wanted to specialize on the FE since lately the paradigm
-						has shifted heavely on do more things on the FE. But I found very difficult
+						has shifted heavily on doing more logic on the FE. But I found very difficult
 						to get things done without a foot on the BE, NodeJS was the answer, it allowed
-						me to prototype very quickly
+						me to prototype very quickly and more flexible than PHP.
 					</aside>
 				</section>
 				<section>
@@ -96,8 +96,7 @@
 				</section>
 
 				<section>
-					<h2>What is Node.js?</h2>
-					<h3>Asynchronous and Event Driven</h3>
+					<h2>Asynchronous and Event Driven</h2>
 					<p>
 						All APIs of Node.js library are asynchronous that is, non-blocking. <strong>There is no sleep on Node</strong>.<br />
 						<img width="50%" src="img/event-loop.png" title="Node processing model" />
@@ -301,8 +300,18 @@ $ pm2 start app.js -i 0
 				<section>
 					<h2>Versatility</h2>
 					<p>
-						Oh.. and you know, universal (isomorphic) web applications.
+						Oh.. and you know, universal (isomorphic) web applications.<br />
+						<img src="img/mind_blown.gif" alt="" />
 					</p>
+					<aside class="notes">
+					  The case of universal or isomorphic applications could take a whole talk
+						by itself, but it is a trend that is gaining traction on the web industry,
+						and one that can obviously can only be solved by Node.
+
+						The practicality of reusing the same code you use on the frontend as a single page
+						app to render on the server side is undeniable, and solves most of the problems
+						associated with the rising of frontend frameworks and libraries.
+					</aside>
 				</section>
 
 				<section>
@@ -329,7 +338,7 @@ $ pm2 start app.js -i 0
 					<h2>Misconceptions</h2>
 					<h3>You need a lot of micro-dependencies</h3>
 					<p>
-						No need for frameworks and all their bagage.
+						No need for frameworks and all their bagage.<br />
 						To write a proper microservice you really only need 3 packages, the implementation is up to you.
 						<ul>
 							<li>A server (such as restify)</li>
@@ -338,6 +347,21 @@ $ pm2 start app.js -i 0
 							<li>Or a fetch library if your data lives somewhere else (such as node-fetch)</li>
 						</ul>
 					</p>
+
+					<aside class="notes">
+						Other people might complain about third party packages not being updated or
+
+					  All languages have dependencies in other people's packages, I think it
+						would be an error to think this is a Node problem
+					</aside>
+				</section>
+
+				<section>
+					<h2>End of part 1</h2>
+					<blockquote cite="https://blog.codinghorror.com/the-principle-of-least-power/">
+						"any application that can be written in JavaScript, will eventually be written in JavaScript"<br />
+						<small>-- "Atwood's Law" (Jeff Atwood, 2007)</small>
+					</blockquote>
 				</section>
 
 				<aside class="notes">
