@@ -305,6 +305,41 @@ $ pm2 start app.js -i 0
 					</p>
 				</section>
 
+				<section>
+					<h2>Misconceptions</h2>
+					<h3>Tooling is too cumbersome</h3>
+					<p>
+						Node !== Frontend<br />
+						You don't need the same tooling on the backend than you need on the frontend.<br />
+						Node v6.0.0 (soon to become LTS) supports most of ES6, no need for transpiling.<br />
+						No need for gulp/grunt, npm scripts can solve all your needs (start, test, build, etc).
+					</p>
+				</section>
+
+				<section>
+					<h2>Misconceptions</h2>
+					<h3>NPM installs a bunch of nested dependencies</h3>
+					<p>
+						As of NPM v3 dependencies are installed in a flatten file structure, if a package
+						is needed in a bunch of dependencies it's only installed once.
+					</p>
+				</section>
+
+				<section>
+					<h2>Misconceptions</h2>
+					<h3>You need a lot of micro-dependencies</h3>
+					<p>
+						No need for frameworks and all their bagage.
+						To write a proper microservice you really only need 3 packages, the implementation is up to you.
+						<ul>
+							<li>A server (such as restify)</li>
+							<li>A logger (such as bunyan)</li>
+							<li>A db handler/model (such as mongoose)</li>
+							<li>Or a fetch library if your data lives somewhere else (such as node-fetch)</li>
+						</ul>
+					</p>
+				</section>
+
 				<aside class="notes">
 					A paradigm that is getting a lot of traction here and everywhere are microservices.
 					Joint together with the compartimentalisation of Docker and similar allows us to
