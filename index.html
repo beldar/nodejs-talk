@@ -29,8 +29,9 @@
 				</section>
 				<section>
 					<h1>About me</h1>
+					<h4>Marti Planellas</h4>
 					<p>
-						<img width="50%" src="img/marti.jpg" alt="" />
+						<img width="45%" src="img/marti.jpg" alt="" />
 					</p>
 					<aside class="notes">
 					  I am a FE dev, but I'm not here to talk about FE, but mainly
@@ -40,10 +41,10 @@
 						Since then I wanted to specialize on the FE since lately the paradigm
 						has shifted heavily on doing more logic on the FE. But I found very difficult
 						to get things done without a foot on the BE, NodeJS was the answer, it allowed
-						me to prototype very quickly and more flexible than PHP.
+						me to prototype very quickly and more flexibly than PHP.
 
 						About two or three years ago, I started using Nodejs in production in high demand
-						applications (thousands of requests per second).
+						high scale applications (thousands of requests per second).
 					</aside>
 				</section>
 				<section>
@@ -83,7 +84,7 @@
 						<small>Note: V8 compiles Javascript into machine code on the fly!</small>
 
 						<aside class="notes">
-						  This is the format definition of Node. There are some concepts here
+						  This is the formal definition of Node. There are some concepts here
 							that are quite vague and not clear at first glance, so I want to give
 							you a quick peek to the guts of the language, so you can see
 							where it all comes from.
@@ -109,7 +110,7 @@
 					<h2>Asynchronous and Event Driven</h2>
 					<p>
 						All APIs of Node.js library are asynchronous that is, non-blocking. <strong>There is no sleep on Node</strong>.<br />
-						<img width="50%" src="img/event-loop.png" title="Node processing model" />
+						<img width="70%" src="img/event-loop.png" title="Node processing model" />
 					</p>
 					<aside class="notes">
 						I'm sure most of you have seen this diagram before,
@@ -200,7 +201,7 @@
 						Notice how the hard work is done at the kitchen, but the waiter is
 						never blocked, he just runs around carrying orders.
 
-						The waiter going back and forth is the event loop
+						The waiter going back and forth is the event loop, that's it.
 					</aside>
 				</section>
 
@@ -220,7 +221,7 @@
 					<aside class="notes">
 					  These companies receive an insane amount of requests,
 						the scale on which they work is gigantic, and they've chosen
-						node because of their scalability and easy of use.
+						node because of their scalability and ease of use.
 
 						In fact lets read it from the guys themselves.
 					</aside>
@@ -247,6 +248,8 @@
 						<aside class="notes">
 						  LinkedIn did the same and have seen an increase in speed while
 							decreasing the amount of computing power required.
+
+							That's money in the hand.
 						</aside>
 					</p>
 				</section>
@@ -288,9 +291,9 @@
 					</p>
 
 					<aside class="notes">
-					  I think we sould all realise that scale is a systemic issue,
+					  I think we sould all realize that building at scale is a systemic issue,
 						you don't solve it in just one end of the chain, it needs to
-						be build inside the project.
+						be build end to end.
 
 						Build to scale from the start and you'll never have to worry about load.
 					</aside>
@@ -366,7 +369,7 @@ $ pm2 start app.js -i 0
 					<aside class="notes">
 					  The case of universal or isomorphic applications could take a whole talk
 						by itself, but it is a trend that is gaining traction on the web industry,
-						and one that can obviously can only be solved by Node.
+						and one that can obviously only be solved by Node.
 
 						The practicality of reusing the same code you use on the frontend as a single page
 						app to render on the server side is undeniable, and solves most of the problems
@@ -412,8 +415,8 @@ $ pm2 start app.js -i 0
 						To write a proper microservice you really only need 3 packages, the implementation is up to you.
 						<ul>
 							<li>A server (such as <code>restify</code>)</li>
-							<li>A db handler/model (such as <code>mongoose</code>)</li>
 							<li>A logger (such as <code>bunyan</code>)</li>
+							<li>A db handler/model (such as <code>mongoose</code>)</li>
 							<li>Or a fetch library if your data lives somewhere else (such as <code>node-fetch</code>)</li>
 						</ul>
 					</p>
@@ -529,8 +532,12 @@ asyncStuff1()
 						comprehend what it does and follow the execution the better we
 						can find bugs and refactor different bits.
 
-						As a rule of thumb, you could measure as how fast can you give me
+						As a rule of thumb, you could measure it as how fast can you give
 						an output given a certain input.
+
+						To understand these techniques better, we're going to see it in a practical
+						manner, we'll start with some initial code, and we'll improve it using the
+						technique
 					</aside>
 				</section>
 
@@ -577,6 +584,12 @@ const handleError = ( error ) => {
 	return errorString;
 };
 					</code></pre>
+					<aside class="notes">
+					  When you read and understand this code, every if, every else
+						and every return represents a branch you need to keep track of.
+
+						You could represent this as a tree, a conditional tree.
+					</aside>
 				</section>
 
 				<section>
@@ -593,8 +606,10 @@ const handleError = ( error ) => {
 						your head when you try to get an output.
 
 						The highlighted leaf nodes represent the values that we return,
-						this is really the functionality we expect from our function the output
-						we need, but there are other ways of getting that output.
+						these are the most important part, but there are other ways of getting
+						the same output.
+
+						Lets see how could we improve this code.
 					</aside>
 				</section>
 
@@ -618,6 +633,17 @@ const handleError = ( error ) => {
   return config.MAIN_ERROR;
 };
 					</code></pre>
+
+					<aside class="notes">
+					  The first step is to cut down the elses, if instead of
+						keeping the value we want to return on a variable and returning
+						it at the end of the function we return the value as soon as we know it's
+						value that we want, we're stopping the execution of the function.
+
+						That means that nothing else can happen, and that if the execution
+						continues, the previous case didn't happen. This logic removes
+						the need for else statements, and it simplyfies our tree.
+					</aside>
 				</section>
 
 				<section>
@@ -658,6 +684,14 @@ const handleError = ( error ) => {
   return config.MAIN_ERROR;
 };
 					</code></pre>
+
+					<aside class="notes">
+					  Yes, we are repeating the errorKey in different places, repeating something
+						is not always a capital offence, if it gives us something in return.
+
+						And I hear you think, oh but now the line is too long, well aesthetics can
+						be fixed in other ways.
+					</aside>
 				</section>
 
 				<section>
@@ -684,10 +718,14 @@ const handleError = ( error ) => {
 					</code></pre>
 
 					<aside class="notes">
-					  Now our function is just a series of if statements, we know
+					  But now our function is just a series of if statements, we know
 						that each of them is only going to happen if none of the previous ones
 						happened, and of top of it, it's so declarative it's almost as reading plain
 						english.
+
+						if error key is defined and error constant is defined return error constant.
+
+						Let's take a look at our conditional tree now.
 					</aside>
 				</section>
 
@@ -698,11 +736,12 @@ const handleError = ( error ) => {
 					</p>
 
 					<aside class="notes">
-					  Wow, isn't this tree gorgeous? We managed to cut down the branches
+					  Wow, isn't it gorgeous? We managed to cut down all the branches
 						to almost the same depth.
 
 						Now when we read this code given an input we can almost tell instantly
-						what the output is because the conditions are written in plain english.
+						what the output is because the conditions are written sequentially
+						and in plain english.
 					</aside>
 				</section>
 
@@ -749,6 +788,12 @@ const handleError = ( error ) => {
   return config.MAIN_ERROR;
 };
 					</code></pre>
+
+					<aside class="notes">
+					  Take a look at the length difference of the before and after.
+
+						We've removed code and complexity and we've gained readability.
+					</aside>
 				</section>
 
 				<section>
@@ -764,12 +809,26 @@ const handleError = ( error ) => {
 
 					<aside class="notes">
 					  We've done all of this with only two simple steps.
+
+						Sometimes you only need the first one, and that's fine.
 					</aside>
 				</section>
 
 				<section>
 					<h2>Functional programming</h2>
+					<p>
+						<img src="img/function-js.jpg" alt="" />
+					</p>
 
+					<aside class="notes">
+					  Functional programming is one of the first programming paradigms formulated which
+						it gave birth to one of the programming languages (lisp), and it sounds very
+						academical and unapproachable, but it's really just a set of principles to
+						think about when your writing your code.
+
+						Not everything that we write has to follow these principles, but the more
+						we do it the better.
+					</aside>
 				</section>
 
 				<section>
@@ -777,12 +836,12 @@ const handleError = ( error ) => {
 					<p>
 						A set of patterns when we write our code:
 						<ul>
-							<li>Small modular functions</li>
+							<li>Small single purpose functions</li>
 							<li>Pure functions
 								<ul>
 									<li>No side effects</li>
 									<li>Data should be immutable</li>
-									<li>Avoid non predictable functions (Date)</li>
+									<li>Avoid non predictable values (i.e. Date)</li>
 								</ul>
 							</li>
 							<li>Stateless</li>
@@ -803,10 +862,70 @@ const handleError = ( error ) => {
 							<li>More readable</li>
 						</ul>
 					</p>
+
 				</section>
 
 				<section>
-					<h2>Our array helpers</h2>
+					<h2>Language prerequisites</h2>
+					<p>
+						<ul>
+							<li>Functions are "first-class" objects
+								<ul>
+									<li>Functions can be assigned to a variable</li>
+								</ul>
+							</li>
+							<li>Higher-order functions
+								<ul>
+									<li>Functions can be passed as a parameter to another function</li>
+									<li>Functions can return other functions</li>
+								</ul>
+							</li>
+						</ul>
+					</p>
+
+					<aside class="notes">
+					  Before we start looking at examples, a short intermission
+						 about arrow functions.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Intermission: Arrow functions</h2>
+<pre><code class="hljs js" data-trim contenteditable>
+//Before
+var a = function( arg1, arg2 ) {
+	//doStuff
+	return something;
+};
+
+//With ES6
+const a = ( arg1, arg2 ) => {
+	//doStuff
+	return something;
+};
+
+//If your function has only one expression and its a return
+const a = ( arg1, arg2 ) => expression;
+
+//If your function has only one argument
+const a = arg1 => expression;
+</code></pre>
+
+					<aside class="notes">
+					  Arrow functions are a new language feature of ES6 that I really love,
+						because it makes you write less code, and forces you to use more of the
+						functional programming principle because it just looks so much better!
+
+						In javascript (as of ES6) and I'm sure in lots of other languages or libraries in other
+						languages, we have some built-in high-order functions for arrays, that we
+						should really master to get most of functional programming.
+
+						Let's take a look at a few.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Higher-order functions for Arrays</h2>
 					<h3>Map</h3>
 <pre><code class="hljs js" data-trim contenteditable>
 const a = [ 1, 2, 3, 4 ];
@@ -815,13 +934,19 @@ a.map( x => x * 2 );
 //[ 2, 4, 6, 8 ]
 </code></pre>
 					<aside class="notes">
+						Map returns a new array, with the same lengths of the original
+						one with a transformation applied to each element.
+
+						That function is the callback we pass.
+
 					  Notice that a is constant, therefore map is returning
-						a new array with the same length as the original one.
+						a new array with the same length as the original one without
+						modifying a.
 					</aside>
 				</section>
 
 				<section>
-					<h2>Our array helpers</h2>
+					<h2>Higher-order functions for Arrays</h2>
 					<h3>forEach</h3>
 <pre><code class="hljs js" data-trim contenteditable>
 const a = [ 1, 2, 3, 4 ];
@@ -835,12 +960,12 @@ a.forEach( x => console.log(x) );
 
 					<aside class="notes">
 					  forEach lets us traverse an array applying
-						a callback to each element
+						a callback to each element but it doesn't return anything
 					</aside>
 				</section>
 
 				<section>
-					<h2>Our array helpers</h2>
+					<h2>Higher-order functions for Arrays</h2>
 					<h3>filter</h3>
 <pre><code class="hljs js" data-trim contenteditable>
 const a = [ 1, 2, 3, 4 ];
@@ -848,10 +973,16 @@ const a = [ 1, 2, 3, 4 ];
 a.filter( x => x % 2 === 0 );
 //[ 2, 4 ]
 </code></pre>
+				<aside class="notes">
+				  Filter accepts a callback which uses to check if an array
+					element should be included in the output or not.
+					In this case the number where mod 2 is 0 , therefor pair.
+					Again it returns a brand new array without touching the original.
+				</aside>
 				</section>
 
 				<section>
-					<h2>Our array helpers</h2>
+					<h2>Higher-order functions for Arrays</h2>
 					<h3>reduce</h3>
 <pre><code class="hljs js" data-trim contenteditable>
 const a = [ 1, 2, 3, 4 ];
@@ -859,7 +990,7 @@ const a = [ 1, 2, 3, 4 ];
 a.reduce( ( previous, current ) => previous + current, 0 );
 //10
 const b = [ 'John Smith', 'George Clooney' ];
-/* Produce an object an array with all firstNames and all lastNames */
+/* Produce an object with arrays for all firstNames and lastNames */
 b.reduce( ( previous, current ) => {
 	let parts = current.split(' ');
 	previous.firstNames.push( parts[0] );
@@ -874,14 +1005,71 @@ b.reduce( ( previous, current ) => {
 </code></pre>
 
 					<aside class="notes">
-					  Reduce is maybe the most powerful of all and the most
-						underused
+					  Reduce is maybe the most powerful and yet the most
+						underused of them all.
+
+						Reduce accepts TWO arguments the first one is a function which
+						receives two arguments, the first is the previously returned value, the second
+						is the current element on the array, and it returns the value for the next iteration.
+
+						The second argument is the initial value of previous.
+
+						We can use it to, for example sum all the elements of the array, or more complex
+						example such as constructing an object from an array.
+
+						It may be a bit difficult to get your head around at first, but once you start using it
+						you find use cases everywhere.
+
+						So lets jump to our initial code that we want to optimize.
 					</aside>
 				</section>
 
 				<section>
-					<h2>Our array helpers</h2>
-					<h3>All together now</h3>
+					<h2>Initial code</h2>
+<pre><code class="hljs js height-auto" data-trim contenteditable>
+const c  = [
+	{ name: 'John', vote: 'leave', age: 60 },
+	{ name: 'Mary', vote: 'remain', age: 25 },
+	{ name: 'Dorothy', vote: 'leave', age: 75 },
+	{ name: 'Mark', vote: 'remain', age: 35 },
+];
+/* Calculate average age of remain and leave voters */
+let leaveAgeSum = 0, leaveVoters = 0, remainAgeSum = 0, remainVoters = 0;
+
+for ( let i in c ) {
+	let voter = c[i];
+	if ( voter.vote === 'leave' ) {
+		leaveAgeSum += voter.age;
+		leaveVoters++;
+	}
+	if ( voter.vote === 'remain' ) {
+		remainAgeSum += voter.age;
+		remainVoters++;
+	}
+}
+
+let leaveAvg = leaveAgeSum / leaveVoters;
+//67.5
+let remainAvg = remainAgeSum / remainVoters;
+//30
+</code></pre>
+
+				<aside class="notes">
+				  So this is our starting code, we're given an array of objects
+					about voters, including their name, vote and age.
+
+					And we're asked to calculate the average age of each vote group.
+
+					We could do it like that, inside some kind of for loop, accumulate the
+					age and the totals and calculate the average.
+
+					But judging from what we've just seen from higher-order functions in arrays,
+					there's probably a better way of doing this.
+				</aside>
+				</section>
+
+				<section>
+					<h2>Applying what we learned about higher-order functions for Arrays</h2>
 <pre><code class="hljs js height-auto" data-trim contenteditable>
 const c  = [
 	{ name: 'John', vote: 'leave', age: 60 },
@@ -901,6 +1089,19 @@ let remainAgeSum = remainVoters.reduce( ( p, c ) => p + c.age, 0 );
 let remainAvg 	 = remainAgeSum / remainVoters.length;
 //30
 </code></pre>
+
+				<aside class="notes">
+				  We can use filter to get the vote group, we can use reduce to
+					calculate the age sum, and then we can just calculate the average.
+
+					See how by using this functions we broke it into discrete steps, instead
+					of smashing everything into a for loop.
+
+					You probably are seeing that now the two blocks of code for leavers and remainers
+					looks almost the same, just the variable names and the vote filter value changes.
+
+					So I'm sure we could abstract the same functionality for both groups.
+				</aside>
 				</section>
 
 				<section>
@@ -912,6 +1113,18 @@ const sumAge       = c => c.reduce( ( p, c ) => p + c.age, 0 );
 
 const calcAvg      = ( sum, total ) => sum / total;
 </code></pre>
+
+					<aside class="notes">
+					  As you see these are pure functions, they only do one thing only,
+						they don't modify any data they receive, and they don't have any side effects.
+
+						You can run them as many times as you want and if the inputs are the same
+						the outputs will be the same too.
+
+						So how to we combine them to accomplish the operations we want?
+						There's one thing missing to be able to chain them, calcAvg expects
+						two arguments, but sumAge only returns one.
+					</aside>
 				</section>
 
 				<section>
@@ -932,6 +1145,21 @@ calcAvg( sumAge( filterVoters( c, 'leave' ) ) );
 calcAvg( sumAge( filterVoters( c, 'remain' ) ) );
 //30
 </code></pre>
+
+				<aside class="notes">
+				  We can solve it by returning both values in an object, and now
+					we can combine the functions to get the results we want.
+
+					We're now using the same functions to accomplish both operations,
+					so we were able to reuse the code and only write it once.
+
+					Also we can now test each function separately.
+
+					Now the next step is optional and very much specific to javascript,
+					we accomplished what we wanted, but if we want to keep combining steps,
+					this line can get pretty long, and changing the order or adding a new
+					step can be cumbersome. There is a better way. Using Promises.
+				</aside>
 				</section>
 
 				<section>
@@ -953,6 +1181,19 @@ doSomethingAsync( a )
 .catch( err => console.error(err) )
 </code></pre>
 					</p>
+
+					<aside class="notes">
+					  This is a classic example of a promise
+						on an async operation.
+
+						We return a new promise which accept a callback with two
+						arguments which are also callbacks, resolve and reject.
+
+						When we have result we want we call resolve with it.
+						If something goes wrong we call reject with the error. Simple right?
+
+						But we're not doing anything async in this example why should this be useful?
+					</aside>
 				</section>
 
 				<section>
@@ -968,6 +1209,14 @@ multiplyByTwo( a )
 .then( x => console.log(x) )
 .catch( err => console.error(err) )
 </code></pre>
+					<aside class="notes">
+					  Because they can also be used in a different way in sync stuff.
+
+						We can return Promise.resolve and Promise.reject, to get the same
+						thenable functions and trigger catch blocks.
+
+						Ok so now that we know this, lets apply it to our functions.
+					</aside>
 				</section>
 
 				<section>
@@ -998,10 +1247,23 @@ filterVoters( c, 'remain' )
 .then( x => console.log(x) );
 //30
 </code></pre>
+
+				<aside class="notes">
+				  Now that we've used promises it's clearer what the steps are
+					and quite easy to add a new step in between, or change the order.
+
+					Also it's more readable and easier to reason about.
+
+					Again like on the return early example, our code becomes almost
+					plain english, filter the voters then sum the ages then calculate the average
+					and then log the result
+
+					But there's one more thing that promises gives us.
+				</aside>
 				</section>
 
 				<section>
-					<h2>Error handling</h2>
+					<h2>Error handling: Promise.reject</h2>
 <pre><code class="hljs js height-auto" data-trim contenteditable>
 const filterVoters = ( c, type ) => {
 	if ( !c.length ) return Promise.reject('Empty array');
@@ -1024,13 +1286,25 @@ filterVoters( [], 'leave' )
 .catch( error => console.log('Error!', error) );
 //Error! Empty array
 </code></pre>
+
+				<aside class="notes">
+				  We can add error handling. In this case, we don't want to
+					go through all the steps if our array is empty because its going to fail
+
+					So we want to stop the chain when we realize the array is empty, Promise.reject
+					lets us do that.
+
+					Because of the nature of promises it also allows us to have a single error handler
+					for all the thing that could go wrong on the chain this also reducing the amount
+					of code we need to write to handle errors.
+				</aside>
 				</section>
 
 				<section>
 					<h2>Recap</h2>
 					<p>
 						<ul>
-							<li>Use array helpers</li>
+							<li>Use array higher-order functions</li>
 							<li>Create small pure functions</li>
 							<li>Make them reusable</li>
 							<li>Make them chainable</li>
@@ -1059,6 +1333,7 @@ filterVoters( [], 'leave' )
 							<li>Nodejs Workshop: <a target="_blank" href="http://bit.ly/node-workshop">http://bit.ly/node-workshop</a></li>
 							<li>Discuss: <a target="_blank" href="https://sainsburyslab.slack.com/messages/discuss-nodejs/">#discuss-nodejs</a></li>
 							<li>Slack me: <a target="_blank" href="https://sainsburyslab.slack.com/messages/@marti/">@marti</a></li>
+							<li><a target="_blank" href="https://github.com/JSainsburyPLC/texan-node-service">texan-node-service library</a></li>
 						</ul>
 					</p>
 				</section>
