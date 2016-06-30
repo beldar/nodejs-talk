@@ -1,12 +1,12 @@
 /**
- * Solarized Dark theme for reveal.js.
- * Author: Achim Staebler
- */
+* Solarized Dark theme for reveal.js.
+* Author: Achim Staebler
+*/
 @import url(../../lib/font/league-gothic/league-gothic.css);
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 /**
- * Solarized colors by Ethan Schoonover
- */
+* Solarized colors by Ethan Schoonover
+*/
 html * {
   color-profile: sRGB;
   rendering-intent: auto; }
@@ -26,7 +26,7 @@ body {
 
 ::selection {
   color: #fff;
-  background: #d33682;
+  background: #59584E;
   text-shadow: none; }
 
 .reveal .slides > section,

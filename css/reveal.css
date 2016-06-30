@@ -1143,7 +1143,6 @@ body {
 .reveal .overlay .viewport {
   position: absolute;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   top: 40px;
@@ -1323,3 +1322,13 @@ body {
 
 .zoomed .reveal .roll span:after {
   visibility: hidden; }
+
+/*********************************************
+ * Marti's Code
+ *********************************************/
+.reveal pre code.height-auto {
+  max-height: none; }
+
+.reveal pre.half {
+  width: 50%;
+  float: left; }

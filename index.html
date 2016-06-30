@@ -7,7 +7,7 @@
 		<title>NodeJS Talk</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/moon.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -179,20 +179,24 @@
 						and efficient, when they're finished they give the output (the dish)
 						back to the waiter who brings it back to the user.
 
-						That's it.
+						Notice how the hard work is done at the kitchen, but the waiter is
+						never blocked, he just runs around carrying orders.
+
+						The waiter going back and forth is the event loop
 					</aside>
 				</section>
 
 				<section>
-					<h3>Companies using Node.js in production</h3>
+					<h3>Some companies using Node.js in production</h3>
 					<ol>
 						<li><a target="_blank" href="https://www.youtube.com/watch?v=gtjzjiTI96c&list=PLfXiENmg6yyUpIVY9XVOkbdmBPx6PUm9_">Netflix</a></li>
 						<li><a target="_blank" href="https://source.opennews.org/en-US/articles/nyt-redesigns-mobile/">New York Times</a></li>
 						<li><a target="_blank" href="https://www.paypal-engineering.com/2013/11/22/node-js-at-paypal/">PayPal</a> </li>
 						<li><a target="_blank" href="http://highscalability.com/blog/2012/10/4/linkedin-moved-from-rails-to-node-27-servers-cut-and-up-to-2.html">LinkedIn</a></li>
 						<li><a target="_blank" href="https://medium.com/@nodejs/how-uber-uses-node-js-to-scale-their-business-cd4d8f8e4187#.rf4v5rw0w">Uber</a> </li>
-						<li><a target="_blank" href="http://venturebeat.com/2012/01/24/why-walmart-is-using-node-js/">Wallmart</a> </li>
+						<li><a target="_blank" href="https://www.joyent.com/blog/node-js-at-walmart-introduction">Wallmart</a> </li>
 						<li><a target="_blank" href="http://blog.fogcreek.com/the-trello-tech-stack/">Trello</a></li>
+						<li><a target="_blank" href="http://nerds.airbnb.com/isomorphic-javascript-future-web-apps/">Airbnb</a></li>
 					</ol>
 
 					<aside class="notes">
@@ -226,9 +230,27 @@
 				</section>
 
 				<section>
+					<h2>Wallmart</h2>
+					<p>
+						<img src="img/wallmart.png" alt="" />
+					</p>
+
+					<aside class="notes">
+					  This is a frame from a talk from Walmart (the link is on the slides),
+						where they talked about how they use Node, this image feels quite familiar
+						with what we have at GOL as a backend.
+
+						They actually created and open sourced a pretty good plugin based server
+						library called hapi, acording to their website used by companies like
+						Disney, Macy's, mozilla, PayPal and others.
+					</aside>
+				</section>
+
+				<section>
 					<h2>Scale</h2>
 					<p>
-						Is it all the DevOps' (InfraDevs) job?
+						Is it all the InfraDevs job? Or can we do something about it?<br />
+						<img src="img/devops.jpg" alt="" />
 					</p>
 
 					<aside class="notes">
@@ -315,6 +337,14 @@ $ pm2 start app.js -i 0
 				</section>
 
 				<section>
+					<h2>Fast to learn, fast to code, fast to execute</h2>
+					<p>
+						It's perfect for an agile environment, you can quickly build an MVP and
+						keep iterating until you have all the features you need.
+					</p>
+				</section>
+
+				<section>
 					<h2>Misconceptions</h2>
 					<h3>Tooling is too cumbersome</h3>
 					<p>
@@ -357,6 +387,34 @@ $ pm2 start app.js -i 0
 				</section>
 
 				<section>
+					<h2>Misconceptions</h2>
+					<h3>Is not reliable</h3>
+					<p>
+						Node has grown a lot and fast lately, there was troubled times at the begning, but
+						it now has a strong open source foundation behind, and a robust community making it
+						more secure, fast and reliable every day.
+					</p>
+				</section>
+
+				<section>
+					<h2>My favourites</h2>
+					<ul>
+						<li>Isomorphic SSR</li>
+						<li>Websockets</li>
+						<li>JSON</li>
+						<li>
+							ES6
+							<ul>
+								<li>Arrow functions</li>
+								<li>Promises</li>
+								<li>Short notations in general</li>
+								<li>Deconstruction</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
 					<h2>End of part 1</h2>
 					<blockquote cite="https://blog.codinghorror.com/the-principle-of-least-power/">
 						"any application that can be written in JavaScript, will eventually be written in JavaScript"<br />
@@ -374,6 +432,204 @@ $ pm2 start app.js -i 0
 
 					But when we choose a language we need to weight the main features or advantages of each of them.
 				</aside>
+
+				<section>
+					<h2>Part 2: Programming techniques</h2>
+					<p>
+						Goals:
+
+						<ul>
+							<li>Easy to read</li>
+							<li>Easy to understand</li>
+							<li>Easy to reason about</li>
+						</ul>
+					</p>
+				</section>
+
+				<section>
+					<h2>Return early!</h2>
+					<img src="img/return-early.jpg" alt="" />
+				</section>
+
+				<section>
+					<h2>Initial code</h2>
+					<pre><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+	let { errorKey, errorMessage } = error;
+
+	let errorString = '';
+
+	if ( errorKey ) {
+		if ( errorConstants[ errorKey ] ) {
+			errorString = errorConstants[ errorKey ];
+		} else if ( errorMessage ) {
+			errorString = errorMessage;
+		} else {
+			errorString = errorKey;
+		}
+	} else if ( typeof error === 'string' ) {
+		if ( errorConstants[ error ] ) {
+			errorString = errorConstants[ error ];
+		} else {
+			errorString = error;
+		}
+	} else {
+		errorString = config.MAIN_ERROR;
+	}
+
+	return errorString;
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Conditional Tree</h2>
+					<p>
+						<img src="img/conditional-tree.png" alt="" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Cut down the <code>else</code>s</h2>
+					<pre><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+  let { errorKey, errorMessage } = error;
+
+  if ( errorKey ) {
+    if ( errorConstants[ errorKey ] ) return errorConstants[ errorKey ];
+    if ( errorMessage  ) return errorMessage;
+    return errorKey;
+  }
+
+  if ( typeof error === 'string' ) {
+    if ( errorConstants[ error ] ) return errorConstants[ error ];
+    return error;
+  }
+
+  return config.MAIN_ERROR;
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Conditional Tree</h2>
+					<p>
+						<img src="img/conditional-tree-mod1.png" alt="" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Conditional Tree</h2>
+					<p>
+						<img src="img/conditional-tree-mod1-s.png" alt="" />
+					</p>
+				</section>
+
+				<section>
+					<h2>One <code>if</code> deep</h2>
+					<pre><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+  let { errorKey, errorMessage } = error;
+
+  if ( errorKey && errorConstants[ errorKey ] ) return errorConstants[ errorKey ];
+  if ( errorKey && errorMessage  ) return errorMessage;
+  if ( errorKey ) return errorKey;
+
+  if ( typeof error === 'string' && errorConstants[ error ] ) return errorConstants[ error ];
+  if ( typeof error === 'string' ) return error;
+
+  return config.MAIN_ERROR;
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>One <code>if</code> deep</h2>
+					<pre><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+  let { errorKey, errorMessage } = error;
+
+  if ( errorKey
+    && errorConstants[ errorKey ] ) return errorConstants[ errorKey ];
+
+  if ( errorKey
+    && errorMessage  ) return errorMessage;
+
+  if ( errorKey ) return errorKey;
+
+  if ( typeof error === 'string'
+    && errorConstants[ error ] ) return errorConstants[ error ];
+
+  if ( typeof error === 'string' ) return error;
+
+  return config.MAIN_ERROR;
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Conditional Tree</h2>
+					<p>
+						<img width="75%" src="img/conditional-tree-mod2.png" alt="" />
+					</p>
+				</section>
+
+				<section>
+					<h2>Before and after</h2>
+					<pre class="half"><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+	let { errorKey, errorMessage } = error;
+
+	let errorString = '';
+
+	if ( errorKey ) {
+		if ( errorConstants[ errorKey ] ) {
+			errorString = errorConstants[ errorKey ];
+		} else if ( errorMessage ) {
+			errorString = errorMessage;
+		} else {
+			errorString = errorKey;
+		}
+	} else if ( typeof error === 'string' ) {
+		if ( errorConstants[ error ] ) {
+			errorString = errorConstants[ error ];
+		} else {
+			errorString = error;
+		}
+	} else {
+		errorString = config.MAIN_ERROR;
+	}
+
+	return errorString;
+};
+					</code></pre>
+					<pre class="half"><code class="hljs js height-auto" data-trim contenteditable>
+const handleError = ( error ) => {
+  let { errorKey, errorMessage } = error;
+
+  if ( errorKey && errorConstants[ errorKey ] ) return errorConstants[ errorKey ];
+  if ( errorKey && errorMessage  ) return errorMessage;
+  if ( errorKey ) return errorKey;
+
+  if ( typeof error === 'string' && errorConstants[ error ] ) return errorConstants[ error ];
+  if ( typeof error === 'string' ) return error;
+
+  return config.MAIN_ERROR;
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Recap</h2>
+					<p>
+						When you see lots of nested <code>if</code> or/and lots of <code>else</code> statements:
+
+						<ol>
+							<li>Cut down the <code>else</code>s</li>
+							<li>One <code>if</code> deep</li>
+						</ol>
+					</p>
+				</section>
 			</div>
 		</div>
 
@@ -385,12 +641,14 @@ $ pm2 start app.js -i 0
 			Reveal.initialize({
 				history: true,
 				showNotes: true,
+
+				transition: 'convex',
 				// More info https://github.com/hakimel/reveal.js#dependencies
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.configure({tabReplace: '  '}); hljs.initHighlightingOnLoad(); } }
 				]
 			});
 		</script>
