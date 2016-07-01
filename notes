@@ -1,0 +1,75 @@
+NodeJS Talk
+
+Part1: A case for Nodejs and why we should use it more
+Part2: Programming techniques to improve your code
+
+My background:
+
+Lead FE dev, but I’m not here to talk about FE, but BE
+Use to be full stack, mainly PHP dev.
+
+A paradigm that is getting a lot of traction here and everywhere are microservices.
+
+We use a lot of different range of languages here at Sainsburys
+
+- Language features
+    - Python
+        - Good for big data problems
+        - Fast processing
+        - Matrix manipulations
+        - Machine Learning, Big Data
+        - Lots of libraries
+    - Go
+        - Concurrency
+        - goroutines
+        - fast
+        - very new
+        - good practices not well defined yet
+    - PHP
+        - Easy to learn
+    - Node
+        - Build for the web
+        - Async
+        - Non-blocking
+        - Highly scalable
+        - Universal
+        - Fast
+        - Single-threaded
+        - Exploding ecosystem
+        - Specially good for micro services deployment with Docker, etc.
+
+- The language of the web JSON. native to Node.
+- But the most important for us should not be only these, the most important metric is how many developers can we get that are experts on these languages
+    - http://stackoverflow.com/research/developer-survey-2015#tech
+-
+
+- Myths
+    - It’s a toy language/ it’s not production ready, it’s not widely used
+        - Companies using Nodejs
+    - It’s not fast
+        - V8 is one of the fastest engines out there, faster than Python (and PyPy), and PHP, only topped by Go (since its compiled)
+    - It’s too fragmented, micro modules
+        - Depends on what you need to do, to write a standard micro service you only need 3 packages, a server (such as testify), a logger (such as bunyan) and a fetch/http wrapper/library (such as node-fetch)
+        - npm has improved a lot not with flat file structure dependencies to avoid duplications
+    - It’s difficult to deploy and scale
+        - Perfect candidate for Docker because it’s single threaded
+
+- Misconceptions
+    - https://medium.com/yet-another-node-js-blog/architecture-of-node-js-internal-codebase-57cd8376b71f#.vhr24hvgl
+    - https://blog.ghaiklor.com/how-nodejs-works-bfe09efc80ca#.txcxxcvwk
+    - V8
+    - libuv
+    - other c/c++ bindings
+    - Analogy: restaurant
+    -
+
+- Reason about
+    - easy to read
+    - easy to understand
+    - feels more natural
+
+    {
+    secret: "1467230988735384570",
+    socketId: "6523ddd65d56b9dd"
+    }
+    https://reveal-js-multiplex-ccjbegmaii.now.sh/
